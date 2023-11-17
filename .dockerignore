@@ -1,0 +1,3 @@
+#ignore the front end folder cause we dont need it in this image
+frontend
+config/config.yaml

@@ -22,3 +22,4 @@ go.work
 
 #JetBrains IDEs
 .idea/
+/config/config.yaml
