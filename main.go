@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"errors"
+	"github.com/DipandaAser/werr/internal/auth"
 	"github.com/DipandaAser/werr/internal/config"
 	"github.com/DipandaAser/werr/internal/handlers"
 	"github.com/gin-contrib/cors"
@@ -20,6 +21,9 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	auth.InitAuthClient(config.GetConfig().FIREBASE_CREDENTIALS_FILE)
+
 	router := gin.Default()
 
 	router.Use(cors.New(cors.Config{
