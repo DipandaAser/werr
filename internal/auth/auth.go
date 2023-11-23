@@ -10,6 +10,7 @@ import (
 
 var authClient *auth.Client
 
+// InitAuthClient initializes the firebase auth client. It panic if the connection fails.
 func InitAuthClient(firebaseCredFile string) {
 	opt := option.WithCredentialsFile(firebaseCredFile)
 	app, err := firebase.NewApp(context.Background(), nil, opt)

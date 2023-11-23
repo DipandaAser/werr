@@ -21,15 +21,16 @@ type Config struct {
 	S3_REGION                 string
 	ALLOWED_ORIGINS           []string
 	FIREBASE_CREDENTIALS_FILE string
+	FILESIZELIMIT             int64
 }
 
 var config *Config
 
-func LoadConfiguration() error {
+func LoadConfiguration() {
 	viper.SetConfigFile(configFile)
 	err := viper.ReadInConfig()
 	if err != nil {
-		return err
+		log.Fatalln(err)
 	}
 
 	config = &Config{
@@ -44,9 +45,12 @@ func LoadConfiguration() error {
 		S3_REGION:                 getConfigValueOrPanic("S3_REGION"),
 		ALLOWED_ORIGINS:           viper.GetStringSlice("ALLOWED_ORIGINS"),
 		FIREBASE_CREDENTIALS_FILE: getConfigValueOrPanic("FIREBASE_CREDENTIALS_FILE"),
+		FILESIZELIMIT:             viper.GetInt64("FILESIZELIMIT"),
 	}
 
-	return nil
+	if config.FILESIZELIMIT <= 0 {
+		log.Fatalln("FILESIZELIMIT MUST be greater than 0")
+	}
 }
 
 func GetConfig() *Config {

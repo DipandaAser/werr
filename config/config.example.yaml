@@ -12,4 +12,5 @@ ALLOWED_ORIGINS:
   - "http://localhost"
   - "https://werr.cm"
   - "https://www.werr.cm"
-FIREBASE_CREDENTIALS_FILE: "firebase-credentials.json"
+FIREBASE_CREDENTIALS_FILE: "./config/firebase-credentials.json"
+FILESIZELIMIT: 100000000 #file size limit in bytes

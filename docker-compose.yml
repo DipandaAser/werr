@@ -4,7 +4,12 @@ version: '3'
 services:
 
   backend:
+    depends_on:
+      - database
+      - start-minio
     restart: on-failure
+    ports:
+      - "7000:7000"
     build:
       context: .
       dockerfile: Dockerfile
@@ -53,10 +58,22 @@ services:
   minio:
     image: quay.io/minio/minio
     command: server /data --console-address ":9090"
-    env_file:
-      - ./.docker-env
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
     volumes:
       - minio-storage:/data
     ports:
       - 9000:9000
       - 9090:9090
+
+  start-minio:
+    depends_on:
+      - minio
+    image: golang:buster
+    command: /api/scripts/wait-for-it/wait-for-it.sh minio:9000 -t 120 -- /api/scripts/setup-minio.sh
+    extra_hosts:
+      - host.docker.internal:host-gateway
+
+volumes:
+  minio-storage: {}

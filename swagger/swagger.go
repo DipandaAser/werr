@@ -15,3 +15,11 @@
 //
 // swagger:meta
 package swagger
+
+import "github.com/DipandaAser/werr/pkg/models"
+
+// swagger:response badRequestResponse
+type BadRequestResponseWrapper struct {
+	// in:body
+	Body models.BadRequestResponse
+}

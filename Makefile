@@ -5,4 +5,4 @@ swagger.yaml:
 	swagger generate spec -o ./swagger.yaml
 
 serve-swagger: swagger.yaml
-	swagger serve -F=swagger swagger.yaml --no-open
+	swagger serve -F=swagger -p=9007 swagger.yaml --no-open

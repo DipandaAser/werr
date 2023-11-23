@@ -5,7 +5,9 @@ import (
 	"errors"
 	"github.com/DipandaAser/werr/internal/auth"
 	"github.com/DipandaAser/werr/internal/config"
+	"github.com/DipandaAser/werr/internal/database"
 	"github.com/DipandaAser/werr/internal/handlers"
+	"github.com/DipandaAser/werr/internal/storage"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"log"
@@ -17,17 +19,20 @@ import (
 )
 
 func main() {
-	err := config.LoadConfiguration()
-	if err != nil {
-		log.Fatal(err)
-	}
-
+	config.LoadConfiguration()
+	database.InitDB(config.GetConfig().MONGO_URI, config.GetConfig().DATABASE_NAME)
+	storage.InitStorage(storage.StorageConfig{
+		AccessKey: config.GetConfig().S3_ACCESS_KEY,
+		SecretKey: config.GetConfig().S3_SECRET_KEY,
+		Endpoint:  config.GetConfig().S3_ENDPOINT,
+		Region:    config.GetConfig().S3_REGION,
+		Bucket:    config.GetConfig().S3_BUCKET,
+	})
 	auth.InitAuthClient(config.GetConfig().FIREBASE_CREDENTIALS_FILE)
 
 	router := gin.Default()
 
 	router.Use(cors.New(cors.Config{
-		AllowAllOrigins:  true,
 		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Content-Length", "Content-Type", "Authorization"},
 		ExposeHeaders:    []string{},
@@ -37,6 +42,9 @@ func main() {
 
 	//Health check endpoint
 	router.GET("/health", handlers.Health)
+
+	// Media endpoints
+	router.POST("/media", handlers.AuthMiddleware, handlers.UploadMedia)
 
 	srv := &http.Server{
 		Addr:    ":7000",

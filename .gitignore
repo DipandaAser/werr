@@ -23,3 +23,4 @@ go.work
 #JetBrains IDEs
 .idea/
 /config/config.yaml
+/config/firebase-credentials.json
