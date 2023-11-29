@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="271" height="320" viewBox="0 0 271 320">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #fff;
+      }
+
+      .cls-2 {
+        font-size: 166px;
+        font-family: Delius-Regular, Delius;
+      }
+    </style>
+  </defs>
+  <g id="Logo_Square" data-name="Logo Square" transform="translate(-98 -61)">
+    <rect id="Rectangle_1" data-name="Rectangle 1" class="cls-1" width="271" height="254" rx="48" transform="translate(98 103)"/>
+    <text id="w" class="cls-2" transform="translate(114 225)"><tspan x="0" y="0">w</tspan></text>
+    <text id="e" class="cls-2" transform="translate(250 225)"><tspan x="0" y="0">e</tspan></text>
+    <text id="r" class="cls-2" transform="translate(145 336)"><tspan x="0" y="0">r</tspan></text>
+    <text id="r-2" data-name="r" class="cls-2" transform="translate(265 336)"><tspan x="0" y="0">r</tspan></text>
+  </g>
+</svg>
