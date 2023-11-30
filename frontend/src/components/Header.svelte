@@ -45,7 +45,7 @@
   });
 </script>
 
-<header class="header root">
+<header class="header">
   <div class="sub-header-div">
     <div class="logo">
       <a href="/" aria-label="Werr">
@@ -112,7 +112,7 @@
           console.log("search clicked");
         }}
       >
-        <span> <Icon icon="basil:search-outline" color="black" /> </span>
+        <Icon icon="basil:search-outline" color="black" />
       </button>
     </div>
     <div class="login-links">
@@ -121,9 +121,12 @@
     </div>
     <div class="mobileMenu">
       <button type="button">
-        <span>
-          <Icon icon="basil:menu-solid" color={inScroll ? "black" : "white"} />
-        </span>
+        <Icon
+          icon="basil:menu-solid"
+          color={inScroll ? "black" : "white"}
+          width="28"
+          height="28"
+        />
       </button>
     </div>
   </div>
@@ -132,9 +135,9 @@
 <style lang="scss">
   $hoverHeaderColor: rgba(182, 175, 175, 0.151);
 
-  .root {
-    border: 1px solid red;
-  }
+  // .root {
+  //   border: 1px solid red;
+  // }
 
   .mobileMenu {
     display: block;
@@ -183,6 +186,9 @@
       overflow: visible;
       text-transform: none;
       margin: 0;
+      &:hover {
+        background-color: $hoverHeaderColor;
+      }
     }
 
     .register {
@@ -240,6 +246,7 @@
     z-index: 10;
     color: white;
     transition: background-color 0.2s;
+    padding: 0 16px;
 
     &.in-scrool {
       background-color: white;

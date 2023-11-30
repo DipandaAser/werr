@@ -43,6 +43,7 @@ func UploadMedia(c *gin.Context) {
 		defer func() {
 			err := limitedReader.Close()
 			if err != nil {
+				c.Header("connection", "close")
 				log.Println(err)
 			}
 		}()

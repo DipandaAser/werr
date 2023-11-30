@@ -29,7 +29,7 @@
   //   return unsubscribe;
   // });
 
-  let isCurrentUrlHome = false;
+  let isCurrentUrlHome = true;
 </script>
 
 <Header></Header>

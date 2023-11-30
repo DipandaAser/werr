@@ -2,12 +2,15 @@ package handlers
 
 import (
 	"context"
+	"errors"
 	"github.com/DipandaAser/werr/internal/auth"
 	"github.com/DipandaAser/werr/internal/database"
 	"github.com/DipandaAser/werr/pkg/models"
 	"github.com/gin-gonic/gin"
+	"go.mongodb.org/mongo-driver/mongo"
 	"io"
 	"net/http"
+	"time"
 )
 
 const (
@@ -28,8 +31,30 @@ func AuthMiddleware(c *gin.Context) {
 
 	user, err := database.GetDB().GetUserByID(token.UID)
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusUnauthorized, models.NewBadRequestResponse("User not found"))
-		return
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			userInFirebase, err := auth.GetAuthClient().GetUser(context.Background(), token.UID)
+			if err != nil {
+				c.AbortWithStatusJSON(http.StatusUnauthorized, models.NewBadRequestResponse("An error occur when retrieving your user information"))
+				return
+			}
+			user = models.User{
+				ID: token.UID,
+			}
+			if userInFirebase.DisplayName != "" {
+				user.UserName = userInFirebase.DisplayName
+			}
+			if userInFirebase.UserMetadata != nil {
+				user.JoinedAt = time.Unix(userInFirebase.UserMetadata.CreationTimestamp, 0)
+			}
+			err = database.GetDB().CreateUser(user)
+			if err != nil {
+				c.AbortWithStatusJSON(http.StatusUnauthorized, models.NewBadRequestResponse("An error occur when retrieving your user information"))
+				return
+			}
+		} else {
+			c.AbortWithStatusJSON(http.StatusUnauthorized, models.NewBadRequestResponse("An error occur when retrieving your user information"))
+			return
+		}
 	}
 
 	c.Set(UserFromContextKey, user)

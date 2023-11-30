@@ -24,6 +24,9 @@ func (db *DB) CreateMedia(context mongo.SessionContext, media *models.Media) err
 	if strings.TrimSpace(media.Title) == "" {
 		media.Title = media.ID
 	}
+	if media.Tags == nil {
+		media.Tags = make([]string, 0)
+	}
 	media.InternalID = uuid.Must(uuid.NewRandom()).String()
 	media.CreatedAt = time.Now().UTC()
 	_, err = db.DB.Collection(MediaCollectionName).InsertOne(context, media)

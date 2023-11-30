@@ -34,7 +34,7 @@ func InitDB(dbURI string, databaseName string) {
 	defaultDB = &DB{
 		DB: client.Database(databaseName),
 	}
-	defaultDB.Context, defaultDB.CancelCtx = context.WithTimeout(context.Background(), 60*time.Second)
+	defaultDB.Context = context.TODO()
 	defaultDB.sortIDGenerator = shortid.GetDefault()
 }
 

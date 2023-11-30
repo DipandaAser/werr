@@ -16,3 +16,9 @@ func (db *DB) GetUserByID(id string) (models.User, error) {
 		Decode(&user)
 	return user, err
 }
+
+func (db *DB) CreateUser(user models.User) error {
+	_, err := db.DB.Collection(UserCollectionName).
+		InsertOne(db.Context, user)
+	return err
+}

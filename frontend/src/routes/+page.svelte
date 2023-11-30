@@ -18,6 +18,5 @@
 <style>
   .contentgg {
     height: 2000px;
-    background-color: black;
   }
 </style>
