@@ -13,10 +13,10 @@ RUN npm install
 # build the SvelteKit app
 RUN npm run build
 
-# run stage, to separate it from the build stage, to save disk storage
+# run stage, to separate it from the build stage, to save disk storage y
 FROM node:20.9
 
-WORKDIR /app
+WORKDIR /app 
 
 # copy stuff from the build stage
 COPY --from=build /app/package*.json ./
