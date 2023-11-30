@@ -55,7 +55,12 @@
                 >{searchCategorie.charAt(0).toUpperCase() +
                   searchCategorie.slice(1)}</span
               >
-              <Icon class="icon" icon="basil:caret-down-solid" />
+              <Icon
+                class="icon"
+                icon="basil:caret-down-solid"
+                height="24"
+                width="24"
+              />
             </button>
           </div>
         </div>

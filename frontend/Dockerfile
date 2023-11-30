@@ -16,5 +16,5 @@ RUN npm run build
 # expose the app's port
 EXPOSE 3000
 # run the server
-CMD ["node", "-r", "dotenv/config", "./index.js"]
+CMD ["node", "-r", "dotenv/config", "build"]
 
