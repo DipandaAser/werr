@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - frontend/**
+      - .github/workflows/build-frontend-image.yaml
 
 env:
   REGISTRY: ghcr.io
@@ -39,5 +40,6 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
         with:
+          context: ./frontend
           push: true
           tags: ${{ steps.meta.outputs.tags }}
