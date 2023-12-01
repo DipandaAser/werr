@@ -1,14 +1,14 @@
 <script lang="ts">
   import { routes } from "$lib/index";
   import { CategoriesLabels, CategoriesList } from "$lib/models/categorie";
-  import ChipsTab from "../components/ChipTabs/ChipsTab.svelte";
-  import type { Chip } from "../components/ChipTabs/types";
-  import HomeWelcomeImage from "../components/HomeWelcome/HomeWelcomeImage.svelte";
+  import ChipsTab from "../../components/ChipTabs/ChipsTab.svelte";
+  import type { Chip } from "../../components/ChipTabs/types";
+  import HomeWelcomeImage from "../../components/HomeWelcome/HomeWelcomeImage.svelte";
   import {
     chipsStore,
     updateSelectedChip,
-  } from "../stores/homeCategoriesSelectionStore";
-  import { updateSearchStore } from "../stores/searchStore";
+  } from "../../stores/homeCategoriesSelectionStore";
+  import { updateSearchStore } from "../../stores/searchStore";
 
   /** @type {import('./$types').PageData} */
   // export let data;
@@ -37,30 +37,23 @@
     updateSelectedChip(tab);
   }
 
-  updateSelectedChip("Home");
-  updateSearchStore("", CategoriesLabels.IMAGES);
+  updateSelectedChip(CategoriesLabels.IMAGES);
+  updateSearchStore("", $chipsStore.selected);
 </script>
 
 <svelte:head>
-  <title>{description}</title>
+  <title>{$chipsStore.selected}</title>
 </svelte:head>
 
 <HomeWelcomeImage {welcomeTitle} {description} />
 
 <ChipsTab {onSelectTab} selectedTab={$chipsStore.selected} {chips} />
 
-<div class="contentgg">
-  <button
-    on:click={() => {
-      window.location.href = routes.LOGIN;
-    }}
-  >
-    LOGIN
-  </button>
-</div>
+<div class="contentgg">{$chipsStore.selected}</div>
 
 <style>
   .contentgg {
     height: 2000px;
+    text-align: center;
   }
 </style>

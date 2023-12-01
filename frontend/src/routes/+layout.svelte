@@ -6,7 +6,7 @@
   import { auth } from "$lib/firebase/firebase.client";
   import { browser } from "$app/environment";
   import { authStore } from "../stores/authStore";
-  import { routes } from "$lib";
+  import { routes } from "$lib/index";
   import Header from "../components/Header.svelte";
   import HomeWelcomeImage from "../components/HomeWelcome/HomeWelcomeImage.svelte";
   // onMount(() => {
@@ -34,9 +34,4 @@
 
 <Header></Header>
 
-<!-- <Content> -->
-{#if isCurrentUrlHome}
-  <HomeWelcomeImage></HomeWelcomeImage>
-{/if}
 <slot />
-<!-- </Content> -->

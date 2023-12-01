@@ -1,7 +1,43 @@
 <script lang="ts">
+  import { CategoriesList } from "$lib/models/categorie";
+  import { searchStore } from "../../stores/searchStore";
   import Icon from "@iconify/svelte";
+  import { onMount } from "svelte";
   let searchQuery = "";
   let searchCategorie = "images";
+  let cursorInSearchBox = false;
+  let catChooserDropdownIsOpen = false;
+  export let welcomeTitle: string;
+  export let description: string;
+
+  const selectedColor = "#00ab6b";
+  const unSelectedColor = "#656f79";
+
+  onMount(() => {
+    const searchInput = document.querySelector(".search-box") as HTMLElement;
+    searchInput.addEventListener("click", () => {
+      cursorInSearchBox = true;
+    });
+
+    searchInput.addEventListener("blur", () => {
+      cursorInSearchBox = false;
+    });
+  });
+
+  function toggleContainer() {
+    catChooserDropdownIsOpen = !catChooserDropdownIsOpen;
+    if (catChooserDropdownIsOpen) {
+      const dropdownMenuContainer = document.querySelector(
+        ".dropdownMenuContainer"
+      ) as HTMLElement;
+      dropdownMenuContainer.style.display = "block";
+    } else {
+      const dropdownMenuContainer = document.querySelector(
+        ".dropdownMenuContainer"
+      ) as HTMLElement;
+      dropdownMenuContainer.style.display = "none";
+    }
+  }
 </script>
 
 <div class="base">
@@ -26,11 +62,8 @@
   <div class="overlay"></div>
   <div class="welcomeMessageBox">
     <div class="wrapper">
-      <h1>Stunning media library for your next video content</h1>
-      <h2>
-        Over 4.2 thousand+ high quality images, videos and audio shared by our
-        amazing community for your content creation journey.
-      </h2>
+      <h1>{welcomeTitle}</h1>
+      <h2>{description}</h2>
       <div class="search-box">
         <form class="search-form" action="#" method="get">
           <!-- TODO: to be replaced by form -->
@@ -39,7 +72,10 @@
             type="submit"
             aria-label="Search for {searchCategorie}"
           >
-            <Icon icon="basil:search-solid" color="black" />
+            <Icon
+              icon="basil:search-solid"
+              color={cursorInSearchBox ? "green" : "black"}
+            />
           </button>
           <input
             type="search"
@@ -50,18 +86,54 @@
         </form>
         <div class="chooseCat">
           <div class="chooseCatContainer">
-            <button class="dropdown" type="button">
-              <span class="label"
-                >{searchCategorie.charAt(0).toUpperCase() +
-                  searchCategorie.slice(1)}</span
-              >
+            <button class="dropdown" type="button" on:click={toggleContainer}>
+              <span class="label">{$searchStore.categorie}</span>
               <Icon
                 class="icon"
-                icon="basil:caret-down-solid"
+                icon={catChooserDropdownIsOpen
+                  ? "basil:caret-up-solid"
+                  : "basil:caret-down-solid"}
+                color={catChooserDropdownIsOpen ? "#00ab6b" : "black"}
                 height="24"
                 width="24"
               />
             </button>
+          </div>
+
+          <div class="dropdownMenuContainer">
+            <div class="dropdownMenu">
+              {#each CategoriesList as categorie}
+                <!-- svelte-ignore a11y-click-events-have-key-events -->
+                <!-- svelte-ignore a11y-no-static-element-interactions -->
+                <div
+                  aria-label="Choose {categorie.label}"
+                  id="cat-{categorie.value}"
+                  class="dropdownMenuItem"
+                  on:click={() => {
+                    $searchStore.categorie = categorie.label;
+                    toggleContainer();
+                  }}
+                >
+                  <div class="icon">
+                    <Icon
+                      class="icon-svg"
+                      icon={categorie.icon}
+                      height="24"
+                      width="24"
+                      color={categorie.label === $searchStore.categorie
+                        ? selectedColor
+                        : unSelectedColor}
+                    />
+                  </div>
+                  <!-- svelte-ignore a11y-label-has-associated-control -->
+                  <label
+                    style="color: {categorie.label === $searchStore.categorie
+                      ? selectedColor
+                      : unSelectedColor};">{categorie.label}</label
+                  >
+                </div>
+              {/each}
+            </div>
           </div>
         </div>
       </div>
@@ -71,6 +143,7 @@
 
 <style lang="scss">
   $hoverHeaderColor: rgba(182, 175, 175, 0.151);
+  $chooseCatTextColor: #656f79;
   .base {
     min-height: 464px;
     position: relative;
@@ -150,7 +223,7 @@
         background-color: #fff;
         border: 1px solid #f7f7f7;
         height: 56px;
-        padding: 0 0 0 24px;
+        padding: 0 8px 0 24px;
         border-radius: 56px;
         box-shadow: 0 16px 40px rgba(25, 27, 38, 0.08);
         width: 100%;
@@ -219,7 +292,7 @@
               margin-right: 8px;
               border-radius: 56px;
               background: transparent;
-              color: #656f79;
+              color: $chooseCatTextColor;
               border: none;
               height: 40px;
               padding: 0 16px;
@@ -243,7 +316,6 @@
 
             .label {
               font-weight: 600;
-              color: inherit;
               display: flex;
               align-items: center;
               justify-content: center;
@@ -258,6 +330,69 @@
               font-weight: 400;
               font-variant: normal;
               text-transform: none;
+            }
+          }
+        }
+
+        .dropdownMenuContainer {
+          display: none;
+          color: $chooseCatTextColor;
+          background: #fff;
+          top: calc(100% + 4px);
+          right: 0;
+          position: absolute;
+          min-width: 216px;
+          border-radius: 8px;
+          box-shadow:
+            0 0 0 1px rgba(14, 19, 24, 0.07),
+            0 2px 18px rgba(14, 19, 24, 0.25);
+          z-index: 90;
+
+          .dropdownMenu {
+            display: flex;
+            flex-direction: column;
+            padding: 12px;
+
+            .dropdownMenuItem {
+              // color: #656f79;
+              display: flex;
+              align-items: center;
+              padding: 8px 12px;
+              text-decoration: none;
+              flex-wrap: nowrap;
+              white-space: nowrap;
+              cursor: pointer;
+              border-radius: 8px;
+              user-select: none;
+
+              &:hover {
+                background-color: $hoverHeaderColor;
+                color: black;
+              }
+
+              .icon {
+                font-size: 20px;
+                flex: initial;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                min-width: 24px;
+                margin-right: 8px;
+
+                .icon-svg {
+                  font-style: normal;
+                  font-weight: 400;
+                  font-variant: normal;
+                  text-transform: none;
+                }
+              }
+
+              label {
+                white-space: nowrap;
+                cursor: pointer;
+                font-size: 14px;
+                font-weight: 400;
+              }
             }
           }
         }

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { routes } from "$lib";
+  import { routes } from "$lib/index";
   import { authHandlers, authStore } from "../stores/authStore";
 
   let register = false;
