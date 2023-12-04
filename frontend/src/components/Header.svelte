@@ -1,6 +1,8 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import Icon from "@iconify/svelte";
+  import { openAuthPopup } from "../stores/authPopupStore";
+  import { authStore } from "../stores/authStore";
   const logoMobileClass = "logo-mobile";
   const inScrollClass = "in-scrool";
   let inScroll = false;
@@ -115,10 +117,22 @@
         <Icon icon="basil:search-outline" color="black" />
       </button>
     </div>
-    <div class="login-links">
-      <button class="login">Log in</button>
-      <button class="register">Join</button>
-    </div>
+    {#if !$authStore.currentUser}
+      <div class="login-links">
+        <button
+          class="login"
+          on:click={() => {
+            openAuthPopup(false);
+          }}>Log in</button
+        >
+        <button
+          class="register"
+          on:click={() => {
+            openAuthPopup(true);
+          }}>Join</button
+        >
+      </div>
+    {/if}
     <div class="mobileMenu">
       <button type="button">
         <Icon

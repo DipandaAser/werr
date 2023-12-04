@@ -9,25 +9,27 @@
   import { routes } from "$lib/index";
   import Header from "../components/Header.svelte";
   import HomeWelcomeImage from "../components/HomeWelcome/HomeWelcomeImage.svelte";
-  // onMount(() => {
-  //   const unsubscribe = auth.onAuthStateChanged((user) => {
-  //     console.log(user);
-  //     authStore.update((/** @type {any} */ curr) => {
-  //       return { ...curr, isLoading: false, currentUser: user };
-  //     });
+  import LoginSingUp from "../components/LoginSignUp/LoginSingUp.svelte";
+  import { authPopupStore } from "../stores/authPopupStore";
+  onMount(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      console.log(user);
+      authStore.update((/** @type {any} */ curr) => {
+        return { ...curr, isLoading: false, currentUser: user };
+      });
 
-  //     if (
-  //       browser &&
-  //       !$authStore?.currentUser &&
-  //       !$authStore.isLoading &&
-  //       window.location.pathname !== routes.LOGIN
-  //     ) {
-  //       window.location.href = routes.HOME;
-  //       console.log($authStore.currentUser, $authStore.isLoading);
-  //     }
-  //   });
-  //   return unsubscribe;
-  // });
+      // if (
+      //   browser &&
+      //   !$authStore?.currentUser &&
+      //   !$authStore.isLoading &&
+      //   window.location.pathname !== routes.LOGIN
+      // ) {
+      //   window.location.href = routes.HOME;
+      //   console.log($authStore.currentUser, $authStore.isLoading);
+      // }
+    });
+    return unsubscribe;
+  });
 
   let isCurrentUrlHome = true;
 </script>
@@ -35,3 +37,8 @@
 <Header></Header>
 
 <slot />
+
+<!-- this is the login popup -->
+{#if $authPopupStore.isOpen}
+  <LoginSingUp />
+{/if}
