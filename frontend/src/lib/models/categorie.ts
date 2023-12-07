@@ -69,3 +69,9 @@ export const CategoriesList = [
         url: CategoriesUrls.AUDIOS,
     }
 ];
+
+export function isCategoriesURLHome(url: string): boolean {
+    console.log("THE URL: ", url);
+    // check if url is one of the categories url
+    return CategoriesList.some((category) => category.url === url) || url === '/';
+}

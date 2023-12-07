@@ -3,18 +3,16 @@
   import Icon from "@iconify/svelte";
   import { openAuthPopup } from "../stores/authPopupStore";
   import { authStore } from "../stores/authStore";
+  import { isCategoriesURLHome } from "$lib/models/categorie";
   const logoMobileDark = "/logo/mobile-black.svg";
   const logoMobileWhite = "/logo/mobile-white.svg";
   const logoDesktopDark = "/logo/desktop-black.svg";
   const logoDesktopWhite = "/logo/desktop-white.svg";
   let inScroll = false;
-  let inMobileView = false;
 
   onMount(() => {
     handleScrool();
-    handleResize();
     window.addEventListener("scroll", handleScrool);
-    window.addEventListener("resize", handleResize);
   });
 
   function handleScrool() {
@@ -25,7 +23,7 @@
     const registerBtn = document.querySelector(".register") as HTMLElement;
     const loginBtn = document.querySelector(".login") as HTMLElement;
 
-    if (scrollTop > 0) {
+    if (scrollTop > 0 || !isCategoriesURLHome(window.location.pathname)) {
       inScroll = true;
       header.style.backgroundColor = "white";
       header.style.color = "black";
@@ -50,10 +48,6 @@
       loginBtn.style.color = "white";
       registerBtn.style.color = "white";
     }
-  }
-
-  function handleResize() {
-    inMobileView = !window.matchMedia("(min-width: 769px)").matches;
   }
 </script>
 
