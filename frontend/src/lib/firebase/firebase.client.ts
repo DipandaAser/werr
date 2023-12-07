@@ -47,6 +47,9 @@ export function getFirebaseAuthErrorMessage(error: { code: string }): string {
         case 'auth/too-many-requests':
             message = 'Too many requests. Please try again later.';
             break;
+        case 'auth/invalid-login-credentials':
+            message = 'Invalid login credentials. Please try again.';
+            break;
         // Add more cases as needed for different Firebase Auth errors
         default:
             message = 'An error occurred. Please try again.';

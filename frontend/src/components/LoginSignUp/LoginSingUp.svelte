@@ -3,13 +3,13 @@
   import { authPopupStore, closeAuthPopup } from "../../stores/authPopupStore";
   import { authHandlers } from "../../stores/authStore";
   import { getFirebaseAuthErrorMessage } from "$lib/firebase/firebase.client";
-  import type { FirebaseError } from "firebase/app";
-  import { error } from "@sveltejs/kit";
+  import LoadingButton from "./LoadingButton.svelte";
   export let register = true;
   let passwordVisibility = false;
   let email = "";
   let password = "";
   let username = "";
+  let isLoading = false;
 
   //error
   let showError = false;
@@ -17,27 +17,42 @@
 
   const togglePasswordVisibility = () => {
     passwordVisibility = !passwordVisibility;
+    const pwdInput = document.getElementById("password") as HTMLInputElement;
+    if (pwdInput.type === "password") {
+      pwdInput.type = "text";
+    } else {
+      pwdInput.type = "password";
+    }
   };
 
-  function join(isGoogle = false) {
+  async function join(isGoogle = false) {
+    clearError();
     try {
       if (isGoogle) {
-        authHandlers.joinWithGoogle();
-        return;
-      }
-      if (register) {
-        authHandlers.signup(username, email, password);
-        return;
+        await authHandlers.joinWithGoogle();
+      } else if (register) {
+        isLoading = true;
+        await authHandlers.signup(username, email, password);
       } else {
-        authHandlers.login(email, password);
-        return;
+        isLoading = true;
+        await authHandlers.login(email, password);
       }
+
+      isLoading = false;
+      closeAuthPopup();
+      return;
     } catch (error) {
+      isLoading = false;
       const errMessage = getFirebaseAuthErrorMessage(error as { code: string });
       console.log("error message: ", errorMessage);
       showError = true;
       errorMessage = errMessage;
     }
+  }
+
+  function clearError() {
+    showError = false;
+    errorMessage = "";
   }
 
   register = $authPopupStore.isRegisterMode;
@@ -113,7 +128,7 @@
                     {#if register}
                       <div class="inputField">
                         <!-- svelte-ignore a11y-label-has-associated-control -->
-                        <label for="username">* Nom d'utilisateur</label>
+                        <label for="username">* Username</label>
                         <div class="textInputContainer">
                           <div class="textInputField">
                             <input
@@ -121,7 +136,7 @@
                               name="username"
                               class="textInput"
                               type="text"
-                              placeholder="par exemple maria93"
+                              placeholder="example maria93"
                               bind:value={username}
                             />
                           </div>
@@ -129,7 +144,7 @@
                       </div>
                       <div class="inputField">
                         <!-- svelte-ignore a11y-label-has-associated-control -->
-                        <label for="email">* Adresse e-mail</label>
+                        <label for="email">* Email address</label>
                         <div class="textInputContainer">
                           <div class="textInputField">
                             <input
@@ -145,7 +160,7 @@
                       </div>
                       <div class="passwordContainer">
                         <!-- svelte-ignore a11y-label-has-associated-control -->
-                        <label for="password">* Mot de passe</label>
+                        <label for="password">* Password</label>
                         <div class="textInputContainer">
                           <div class="textInputField">
                             <input
@@ -175,30 +190,25 @@
                         </div>
                       </div>
                       <div>
-                        <div class="container--fHV0K veryPoor--ANwnx">
-                          <div class="barContainer--4CtC5">
+                        <div>
+                          <div>
                             <div
-                              class="bar--tZ-QC"
                               role="progressbar"
                               aria-valuenow="0"
                               aria-valuemin="0"
                               aria-valuemax="4"
                             ></div>
                           </div>
-                          <div class="label--I3Orw">
-                            Force<span class="strengthLabel--aERDT"
-                              >très faible</span
-                            >
+                          <div>
+                            Strengh<span>&nbsp weak</span>
                           </div>
                         </div>
                       </div>
-                      <div>
-                        *&nbsp;minimum 8&nbsp;caractères, dont un chiffre
-                      </div>
+                      <div>*&nbsp;at least 8&nbsp;char, inclusing 1 number</div>
                     {:else}
                       <div class="inputField">
                         <!-- svelte-ignore a11y-label-has-associated-control -->
-                        <label for="email">* Adresse e-mail</label>
+                        <label for="email">* Email address</label>
                         <div class="textInputContainer">
                           <div class="textInputField">
                             <input
@@ -214,7 +224,7 @@
                       </div>
                       <div class="passwordContainer">
                         <!-- svelte-ignore a11y-label-has-associated-control -->
-                        <label for="password">* Mot de passe</label>
+                        <label for="password">* Password</label>
                         <div class="textInputContainer">
                           <div class="textInputField">
                             <input
@@ -269,8 +279,14 @@
                           join(false);
                         }}
                       >
-                        <span class="label">Rejoindre</span></button
-                      >
+                        {#if isLoading}
+                          <LoadingButton />
+                        {:else}
+                          <span class="label"
+                            >{register ? "Create account" : "Login"}</span
+                          >
+                        {/if}
+                      </button>
                     </div>
                   </form>
                 </div>
@@ -307,6 +323,13 @@
     justify-content: center;
     z-index: 10;
     background-color: rgba(25, 27, 38, 0.3);
+  }
+
+  .error {
+    color: #d14848;
+    font-size: 14px;
+    font-weight: bolder;
+    margin-top: 16px;
   }
 
   .container {
