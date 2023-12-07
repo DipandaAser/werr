@@ -3,108 +3,76 @@
   import Icon from "@iconify/svelte";
   import { openAuthPopup } from "../stores/authPopupStore";
   import { authStore } from "../stores/authStore";
-  const logoMobileClass = "logo-mobile";
-  const inScrollClass = "in-scrool";
+  const logoMobileDark = "/logo/mobile-black.svg";
+  const logoMobileWhite = "/logo/mobile-white.svg";
+  const logoDesktopDark = "/logo/desktop-black.svg";
+  const logoDesktopWhite = "/logo/desktop-white.svg";
   let inScroll = false;
-  const outScrollClass = "out-scrool";
+  let inMobileView = false;
 
   onMount(() => {
-    window.addEventListener("scroll", () => {
-      const header = document.querySelector(".header") as HTMLElement;
-      const scrollTop =
-        window.pageYOffset || document.documentElement.scrollTop;
+    handleScrool();
+    handleResize();
+    window.addEventListener("scroll", handleScrool);
+    window.addEventListener("resize", handleResize);
+  });
 
-      const inMobile = window.innerWidth < 769;
-      const registerBtn = document.querySelector(".register") as HTMLElement;
-      const loginBtn = document.querySelector(".login") as HTMLElement;
+  function handleScrool() {
+    const header = document.querySelector(".header") as HTMLElement;
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
 
-      if (scrollTop > 0) {
-        inScroll = true;
-        header.style.backgroundColor = "white";
-        header.style.color = "black";
-        header.style.borderBottom = "1px solid #ebecf0";
-        loginBtn.style.color = "#656f79";
-        registerBtn.style.color = "black";
-        if (inMobile) {
-          const enterMobileSearch = document.querySelector(
-            ".enter-mobile-search"
-          ) as HTMLElement;
-          enterMobileSearch.style.display = "flex";
-        }
-      } else {
-        inScroll = false;
-        header.style.backgroundColor = "transparent";
-        header.style.color = "white";
-        header.style.borderBottom = "";
+    const inMobile = window.innerWidth < 769;
+    const registerBtn = document.querySelector(".register") as HTMLElement;
+    const loginBtn = document.querySelector(".login") as HTMLElement;
+
+    if (scrollTop > 0) {
+      inScroll = true;
+      header.style.backgroundColor = "white";
+      header.style.color = "black";
+      header.style.borderBottom = "1px solid #ebecf0";
+      loginBtn.style.color = "#656f79";
+      registerBtn.style.color = "black";
+      if (inMobile) {
         const enterMobileSearch = document.querySelector(
           ".enter-mobile-search"
         ) as HTMLElement;
-        enterMobileSearch.style.display = "none";
-        loginBtn.style.color = "white";
-        registerBtn.style.color = "white";
+        enterMobileSearch.style.display = "flex";
       }
-    });
-  });
+    } else {
+      inScroll = false;
+      header.style.backgroundColor = "transparent";
+      header.style.color = "white";
+      header.style.borderBottom = "";
+      const enterMobileSearch = document.querySelector(
+        ".enter-mobile-search"
+      ) as HTMLElement;
+      enterMobileSearch.style.display = "none";
+      loginBtn.style.color = "white";
+      registerBtn.style.color = "white";
+    }
+  }
+
+  function handleResize() {
+    inMobileView = !window.matchMedia("(min-width: 769px)").matches;
+  }
 </script>
 
 <header class="header">
   <div class="sub-header-div">
     <div class="logo">
       <a href="/" aria-label="Werr">
-        <svg
-          class={logoMobileClass}
-          xmlns="http://www.w3.org/2000/svg"
-          xmlns:xlink="http://www.w3.org/1999/xlink"
-          width="40"
-          height="40"
-          viewBox="0 0 40 40"
-        >
-          <defs>
-            <clipPath id="clip-LOGO_40">
-              <rect width="40" height="40" />
-            </clipPath>
-          </defs>
-          <g id="LOGO_40" data-name="LOGO 40" clip-path="url(#clip-LOGO_40)">
-            <rect
-              id="Rectangle_4"
-              data-name="Rectangle 4"
-              width="40"
-              height="40"
-              rx="9"
-              fill="#fff"
-            />
-            <text
-              id="w"
-              transform="translate(12 16)"
-              font-size="16"
-              font-family="Delius-Regular, Delius"
-              ><tspan x="-6.288" y="0">w</tspan></text
-            >
-            <text
-              id="e"
-              transform="translate(30 16)"
-              font-size="16"
-              font-family="Delius-Regular, Delius"
-              ><tspan x="-4.312" y="0">e</tspan></text
-            >
-            <text
-              id="r"
-              transform="translate(12 36)"
-              font-size="16"
-              font-family="Delius-Regular, Delius"
-              ><tspan x="-3.264" y="0">r</tspan></text
-            >
-            <text
-              id="r-2"
-              data-name="r"
-              transform="translate(30 36)"
-              font-size="16"
-              font-family="Delius-Regular, Delius"
-              ><tspan x="-3.264" y="0">r</tspan></text
-            >
-          </g>
-        </svg>
-        <!-- TODO: Add logo desktop -->
+        <picture>
+          <source
+            media="(min-width: 769px)"
+            srcset={inScroll ? logoDesktopDark : logoDesktopWhite}
+            type="image/svg+xml"
+          />
+          <img
+            class="logo"
+            src={inScroll ? logoMobileDark : logoMobileWhite}
+            alt="Werr"
+          />
+        </picture>
       </a>
     </div>
     <div class="enter-mobile-search">
@@ -280,19 +248,16 @@
     flex: 0 0 auto;
   }
 
-  .logo-mobile {
+  .logo {
     width: 40px;
     height: 40px;
   }
 
-  svg {
-    border: 1px solid red;
-  }
-
   // large screen specific
   @media screen and (min-width: 769px) {
-    .logo-mobile {
-      display: none;
+    .logo {
+      width: 120px;
+      height: 33px;
     }
     .enter-mobile-search {
       display: none;

@@ -20,7 +20,6 @@ export const authHandlers = {
             store.isLoading = false;
             return store;
         })
-        closeAuthPopup();
     },
     signup: async (username: string, email: string, password: string) => {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
@@ -29,7 +28,6 @@ export const authHandlers = {
             store.isLoading = false;
             return store;
         })
-        closeAuthPopup();
     },
     logout: async () => {
         await signOut(auth);
@@ -54,9 +52,7 @@ export const authHandlers = {
         provider.addScope('email');
         await signInWithPopup(auth, provider)
         const result = await getRedirectResult(auth);
-        console.log("joinWithGoogle", result);
         if (result) {
-            console.log("join worked")
             //const credential = GoogleAuthProvider.credentialFromResult(result);
             //const token = credential?.accessToken;
             authStore.update(store => {
@@ -66,8 +62,5 @@ export const authHandlers = {
                 return store;
             })
         }
-
-        console.log("join finished");
-        closeAuthPopup();
     }
 }

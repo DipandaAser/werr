@@ -1,16 +1,44 @@
-<script>
+<script lang="ts">
   import Icon from "@iconify/svelte";
   import { authPopupStore, closeAuthPopup } from "../../stores/authPopupStore";
   import { authHandlers } from "../../stores/authStore";
+  import { getFirebaseAuthErrorMessage } from "$lib/firebase/firebase.client";
+  import type { FirebaseError } from "firebase/app";
+  import { error } from "@sveltejs/kit";
   export let register = true;
   let passwordVisibility = false;
   let email = "";
   let password = "";
   let username = "";
 
+  //error
+  let showError = false;
+  let errorMessage = "";
+
   const togglePasswordVisibility = () => {
     passwordVisibility = !passwordVisibility;
   };
+
+  function join(isGoogle = false) {
+    try {
+      if (isGoogle) {
+        authHandlers.joinWithGoogle();
+        return;
+      }
+      if (register) {
+        authHandlers.signup(username, email, password);
+        return;
+      } else {
+        authHandlers.login(email, password);
+        return;
+      }
+    } catch (error) {
+      const errMessage = getFirebaseAuthErrorMessage(error as { code: string });
+      console.log("error message: ", errorMessage);
+      showError = true;
+      errorMessage = errMessage;
+    }
+  }
 
   register = $authPopupStore.isRegisterMode;
 </script>
@@ -46,9 +74,7 @@
                   >
                     <div class="socialAuthButtons">
                       <div class="socialAuthButtons-container">
-                        <button
-                          on:click={authHandlers.joinWithGoogle}
-                          type="button"
+                        <button on:click={() => join(true)} type="button"
                           ><svg
                             viewBox="0 0 24 24"
                             xmlns="http://www.w3.org/2000/svg"
@@ -218,6 +244,11 @@
                         </div>
                       </div>
                     {/if}
+                    {#if showError}
+                      <div class="error">
+                        {errorMessage}
+                      </div>
+                    {/if}
 
                     <div class="recaptchaExplainer">
                       This site is protected by reCAPTCHA and the Google <a
@@ -235,11 +266,7 @@
                         type="submit"
                         on:click={(e) => {
                           e.preventDefault();
-                          if (register) {
-                            authHandlers.signup(username, email, password);
-                          } else {
-                            authHandlers.login(email, password);
-                          }
+                          join(false);
                         }}
                       >
                         <span class="label">Rejoindre</span></button
