@@ -1,11 +1,14 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import Icon from "@iconify/svelte";
-  import { openAuthPopup } from "../stores/authPopupStore";
-  import { authStore } from "../stores/authStore";
+  import { openAuthPopup } from "../../stores/authPopupStore";
+  import { authStore } from "../../stores/authStore";
   import { isCategoriesURLHome } from "$lib/models/categorie";
   import UserMenuButton from "./UserMenuButton.svelte";
-  import AccountDropDown from "./AccountDropdownMenu/AccountDropDown.svelte";
+  import AccountDropDown from "../AccountDropdownMenu/AccountDropdownMobile.svelte";
+  import DropdownMenu from "../AccountDropdownMenu/DropdownMenu.svelte";
+  import AccountDropdownLarge from "../AccountDropdownMenu/AccountDropdownLarge.svelte";
+  import AccountDropdownMobile from "../AccountDropdownMenu/AccountDropdownMobile.svelte";
   const logoMobileDark = "/logo/mobile-black.svg";
   const logoMobileWhite = "/logo/mobile-white.svg";
   const logoDesktopDark = "/logo/desktop-black.svg";
@@ -102,15 +105,21 @@
         >
       </div>
     {:else}
+      <div class="spacer" />
       <div class="userMenu">
         <UserMenuButton
           src={$authStore?.currentUser?.photoURL ?? undefined}
           onClick={toggleUserMenu}
         />
+        {#if isUserMenuOpen && window.innerWidth >= 769}
+          <AccountDropdownLarge
+            name={$authStore?.currentUser?.displayName ?? undefined}
+          />
+        {/if}
       </div>
-      {#if isUserMenuOpen}
+      {#if isUserMenuOpen && window.innerWidth < 769}
         <div>
-          <AccountDropDown
+          <AccountDropdownMobile
             avatarUrl={$authStore?.currentUser?.photoURL ?? undefined}
             name={$authStore?.currentUser?.displayName ?? undefined}
             closeFunction={toggleUserMenu}
@@ -245,7 +254,7 @@
     z-index: 10;
     color: white;
     transition: background-color 0.2s;
-    padding: 0 16px;
+    // padding: 0 16px;
 
     &.in-scrool {
       background-color: white;
@@ -254,6 +263,8 @@
     }
 
     .sub-header-div {
+      padding: 0 16px;
+      justify-content: flex-start;
       max-width: 1830px;
       width: 100%;
       display: flex;
@@ -274,6 +285,10 @@
     position: relative;
     display: flex;
     margin-left: 8px;
+  }
+
+  .spacer {
+    flex: 1 1 auto;
   }
 
   // large screen specific

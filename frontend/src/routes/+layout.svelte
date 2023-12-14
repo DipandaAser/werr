@@ -1,14 +1,10 @@
 <script lang="ts">
   import "../app.scss";
   import "carbon-components-svelte/css/white.css";
-  import { Content } from "carbon-components-svelte";
-  import { afterUpdate, onMount } from "svelte";
+  import { onMount } from "svelte";
   import { auth } from "$lib/firebase/firebase.client";
-  import { browser } from "$app/environment";
   import { authStore } from "../stores/authStore";
-  import { routes } from "$lib/index";
-  import Header from "../components/Header.svelte";
-  import HomeWelcomeImage from "../components/HomeWelcome/HomeWelcomeImage.svelte";
+  import Header from "../components/Header/Header.svelte";
   import LoginSingUp from "../components/LoginSignUp/LoginSingUp.svelte";
   import { authPopupStore } from "../stores/authPopupStore";
   onMount(() => {
@@ -30,8 +26,6 @@
     });
     return unsubscribe;
   });
-
-  let isCurrentUrlHome = true;
 </script>
 
 <Header></Header>

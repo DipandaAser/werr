@@ -3,7 +3,7 @@
 </script>
 
 <div class="dropdownMenu">
-  <a class="dropdownMenuItem" href="#">
+  <a class="dropdownMenuItem" style="margin-top: 0px;" href="#">
     <!-- svelte-ignore a11y-label-has-associated-control -->
     <label>Mon profil</label>
   </a>
@@ -26,7 +26,7 @@
     <!-- svelte-ignore a11y-label-has-associated-control -->
     <label>Abonnements</label>
   </a>
-  <a class="dropdownMenuItem" href="#">
+  <a class="dropdownMenuItem" style="margin-bottom: 4px;" href="#">
     <!-- svelte-ignore a11y-label-has-associated-control -->
     <label>Paramètres</label>
   </a>
@@ -45,6 +45,7 @@
     display: flex;
     flex-direction: column;
     padding: 12px;
+    margin-top: 0;
   }
 
   .dropdownMenuItem {
