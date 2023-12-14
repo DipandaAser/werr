@@ -4,11 +4,14 @@
   import { openAuthPopup } from "../stores/authPopupStore";
   import { authStore } from "../stores/authStore";
   import { isCategoriesURLHome } from "$lib/models/categorie";
+  import UserMenuButton from "./UserMenuButton.svelte";
+  import AccountDropDown from "./AccountDropdownMenu/AccountDropDown.svelte";
   const logoMobileDark = "/logo/mobile-black.svg";
   const logoMobileWhite = "/logo/mobile-white.svg";
   const logoDesktopDark = "/logo/desktop-black.svg";
   const logoDesktopWhite = "/logo/desktop-white.svg";
   let inScroll = false;
+  let isUserMenuOpen = false;
 
   onMount(() => {
     handleScrool();
@@ -48,6 +51,10 @@
       loginBtn.style.color = "white";
       registerBtn.style.color = "white";
     }
+  }
+
+  function toggleUserMenu() {
+    isUserMenuOpen = !isUserMenuOpen;
   }
 </script>
 
@@ -94,6 +101,22 @@
           }}>Join</button
         >
       </div>
+    {:else}
+      <div class="userMenu">
+        <UserMenuButton
+          src={$authStore?.currentUser?.photoURL ?? undefined}
+          onClick={toggleUserMenu}
+        />
+      </div>
+      {#if isUserMenuOpen}
+        <div>
+          <AccountDropDown
+            avatarUrl={$authStore?.currentUser?.photoURL ?? undefined}
+            name={$authStore?.currentUser?.displayName ?? undefined}
+            closeFunction={toggleUserMenu}
+          />
+        </div>
+      {/if}
     {/if}
     <div class="mobileMenu">
       <button type="button">
@@ -245,6 +268,12 @@
   .logo {
     width: 40px;
     height: 40px;
+  }
+
+  .userMenu {
+    position: relative;
+    display: flex;
+    margin-left: 8px;
   }
 
   // large screen specific
