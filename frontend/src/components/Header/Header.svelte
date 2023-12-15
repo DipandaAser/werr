@@ -9,6 +9,9 @@
   import DropdownMenu from "../AccountDropdownMenu/DropdownMenu.svelte";
   import AccountDropdownLarge from "../AccountDropdownMenu/AccountDropdownLarge.svelte";
   import AccountDropdownMobile from "../AccountDropdownMenu/AccountDropdownMobile.svelte";
+  import * as multiLang from "$paraglide/messages";
+  import { translatePath } from "$lib/i18n";
+  import { languageStore } from "../../stores/languageStore";
   const logoMobileDark = "/logo/mobile-black.svg";
   const logoMobileWhite = "/logo/mobile-white.svg";
   const logoDesktopDark = "/logo/desktop-black.svg";
@@ -64,7 +67,7 @@
 <header class="header">
   <div class="sub-header-div">
     <div class="logo">
-      <a href="/" aria-label="Werr">
+      <a href={translatePath("/", $languageStore.lang)} aria-label="Werr">
         <picture>
           <source
             media="(min-width: 769px)"
@@ -95,7 +98,7 @@
           class="login"
           on:click={() => {
             openAuthPopup(false);
-          }}>Log in</button
+          }}>{multiLang.login()}</button
         >
         <button
           class="register"

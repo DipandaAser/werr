@@ -73,5 +73,9 @@ export const CategoriesList = [
 export function isCategoriesURLHome(url: string): boolean {
     console.log("THE URL: ", url);
     // check if url is one of the categories url
-    return CategoriesList.some((category) => category.url === url) || url === '/';
+    // check if the category url is on the form of /[language]/[category]
+    return CategoriesList.some((category) => {
+        const regex = new RegExp(`^/([a-z]{2})?${category.url}$`, 'i');
+        return regex.test(url) || category.url === url;
+    }) || (url === '/' || new RegExp(`^/([a-z]{2})`, 'i').test(url));
 }

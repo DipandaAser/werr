@@ -1,0 +1,14 @@
+{
+	"$schema": "https://inlang.com/schema/inlang-message-format",
+	"hello_world": "Hello World",
+	"greeting": "Hello {name}",
+    "login": "Se connecter",
+	"userMenumyProfile": "Mon profil",
+	"userMenumyMedia": "Mes médias",
+	"userMenuupload": "Upload",
+	"userMenucollections": "Collections",
+	"userMenufollowing": "Abonnements",		
+	"userMenusettings": "Paramètres",
+	"userMenulogout": "Déconnexion"
+	
+}

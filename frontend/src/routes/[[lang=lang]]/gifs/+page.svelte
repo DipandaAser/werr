@@ -1,14 +1,16 @@
 <script lang="ts">
+  import { translatePath } from "$lib/i18n";
   import { routes } from "$lib/index";
   import { CategoriesLabels, CategoriesList } from "$lib/models/categorie";
-  import ChipsTab from "../components/ChipTabs/ChipsTab.svelte";
-  import type { Chip } from "../components/ChipTabs/types";
-  import HomeWelcomeImage from "../components/HomeWelcome/HomeWelcomeImage.svelte";
+  import ChipsTab from "../../../components/ChipTabs/ChipsTab.svelte";
+  import type { Chip } from "../../../components/ChipTabs/types";
+  import HomeWelcomeImage from "../../../components/HomeWelcome/HomeWelcomeImage.svelte";
   import {
     chipsStore,
     updateSelectedChip,
-  } from "../stores/homeCategoriesSelectionStore";
-  import { updateSearchStore } from "../stores/searchStore";
+  } from "../../../stores/homeCategoriesSelectionStore";
+  import { languageStore } from "../../../stores/languageStore";
+  import { updateSearchStore } from "../../../stores/searchStore";
 
   /** @type {import('./$types').PageData} */
   // export let data;
@@ -22,7 +24,7 @@
     return {
       label: categorie.label,
       icon: categorie.icon,
-      link: categorie.url,
+      link: translatePath(categorie.url, $languageStore.lang),
     };
   });
 
@@ -30,37 +32,30 @@
   chips.unshift({
     label: "Home",
     icon: "basil:home-solid",
-    link: routes.HOME,
+    link: translatePath(routes.HOME, $languageStore.lang),
   });
 
   function onSelectTab(tab: string): void {
     updateSelectedChip(tab);
   }
 
-  updateSelectedChip("Home");
-  updateSearchStore("", CategoriesLabels.IMAGES);
+  updateSelectedChip(CategoriesLabels.GIFS);
+  updateSearchStore("", $chipsStore.selected);
 </script>
 
 <svelte:head>
-  <title>{description}</title>
+  <title>{$chipsStore.selected}</title>
 </svelte:head>
 
 <HomeWelcomeImage {welcomeTitle} {description} />
 
 <ChipsTab {onSelectTab} selectedTab={$chipsStore.selected} {chips} />
 
-<div class="contentgg">
-  <button
-    on:click={() => {
-      window.location.href = routes.LOGIN;
-    }}
-  >
-    LOGIN
-  </button>
-</div>
+<div class="contentgg">{$chipsStore.selected}</div>
 
 <style>
   .contentgg {
     height: 2000px;
+    text-align: center;
   }
 </style>

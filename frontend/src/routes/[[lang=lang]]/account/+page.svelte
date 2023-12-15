@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { authHandlers } from "../../stores/authStore";
-  import { authStore } from "../../stores/authStore";
+  import { authHandlers } from "../../../stores/authStore";
+  import { authStore } from "../../../stores/authStore";
 
   let email = "";
 

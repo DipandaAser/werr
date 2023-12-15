@@ -3,6 +3,7 @@
 </script>
 
 <div class="dropdownMenu">
+  <div class="dropdownMenuHeading">Media</div>
   <a class="dropdownMenuItem" style="margin-top: 0px;" href="#">
     <!-- svelte-ignore a11y-label-has-associated-control -->
     <label>Mon profil</label>
@@ -13,6 +14,10 @@
   </a><a class="dropdownMenuItem" href="#">
     <!-- svelte-ignore a11y-label-has-associated-control -->
     <label>Upload</label>
+  </a>
+  <a class="dropdownMenuItem" href="#">
+    <!-- svelte-ignore a11y-label-has-associated-control -->
+    <label>Statistiques</label>
   </a>
   <a class="dropdownMenuItem" href="#">
     <!-- svelte-ignore a11y-label-has-associated-control -->
@@ -27,12 +32,7 @@
     <label>Paramètres</label>
   </a>
   <div class="separator"></div>
-  <!-- svelte-ignore a11y-click-events-have-key-events -->
-  <!-- svelte-ignore a11y-no-static-element-interactions -->
-  <div on:click={authHandlers.logout} class="dropdownMenuItem">
-    <!-- svelte-ignore a11y-label-has-associated-control -->
-    <label>Déconnexion</label>
-  </div>
+  <div class="dropdownMenuHeading">About</div>
 </div>
 
 <style lang="scss">
@@ -42,6 +42,14 @@
     flex-direction: column;
     padding: 12px;
     margin-top: 0;
+  }
+
+  .dropdownMenuHeading {
+    color: #fff;
+    font-weight: 800;
+    white-space: nowrap;
+    padding: 8px 12px;
+    border-radius: 8px;
   }
 
   .dropdownMenuItem {
@@ -61,7 +69,6 @@
 
     &:hover {
       background-color: #5b5b66;
-      color: white;
     }
   }
   label {
