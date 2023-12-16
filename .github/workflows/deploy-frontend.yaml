@@ -1,14 +1,9 @@
 name: Deploy frontend
 
-on:
-  registry_package:
-    types:
-      - updated
-      - published
+on: workflow_dispatch
 
 jobs:
-  deploy-frontend:
-    if: ${{ github.event.registry_package.package_version.name == 'werr-frontend'}}
+   deploy-frontend:
     runs-on: ubuntu-latest
 
     steps:
