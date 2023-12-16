@@ -1,9 +1,13 @@
 // create a map with a list of routes
-
 export const routes = {
     HOME: "/",
-    ACCOUNT: "/account",
     LOGIN: "/login",
+    ACCOUNT: {
+        BASE: "/account",
+        MEDIA: {
+            UPLOAD: "/account/media/upload",
+        }
+    }
 }
 
 

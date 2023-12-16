@@ -3,6 +3,8 @@
 	"hello_world": "Hello World",
 	"greeting": "Hello {name}",
     "login": "Log in",
+    "headerRegister": "Register",
+	"headerExplore": "Explore",
 	"userMenumyProfile": "My profile",
 	"userMenumyMedia": "My media",
 	"userMenuupload": "Upload",

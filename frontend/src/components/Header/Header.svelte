@@ -1,23 +1,26 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import Icon from "@iconify/svelte";
-  import { openAuthPopup } from "../../stores/authPopupStore";
+  import { openAuthPopup, toggleAuthPopup } from "../../stores/authPopupStore";
   import { authStore } from "../../stores/authStore";
   import { isCategoriesURLHome } from "$lib/models/categorie";
   import UserMenuButton from "./UserMenuButton.svelte";
-  import AccountDropDown from "../AccountDropdownMenu/AccountDropdownMobile.svelte";
-  import DropdownMenu from "../AccountDropdownMenu/DropdownMenu.svelte";
   import AccountDropdownLarge from "../AccountDropdownMenu/AccountDropdownLarge.svelte";
   import AccountDropdownMobile from "../AccountDropdownMenu/AccountDropdownMobile.svelte";
   import * as multiLang from "$paraglide/messages";
   import { translatePath } from "$lib/i18n";
+  import { routes } from "$lib";
   import { languageStore } from "../../stores/languageStore";
+  import GlobalMenuMobile from "../GlobalMenu/GlobalMenuMobile.svelte";
+  import GlobalMenuLarge from "../GlobalMenu/GlobalMenuLarge.svelte";
+  import { page } from "$app/stores";
   const logoMobileDark = "/logo/mobile-black.svg";
   const logoMobileWhite = "/logo/mobile-white.svg";
   const logoDesktopDark = "/logo/desktop-black.svg";
   const logoDesktopWhite = "/logo/desktop-white.svg";
   let inScroll = false;
   let isUserMenuOpen = false;
+  let isGlobalMenuOpen = false;
 
   onMount(() => {
     handleScrool();
@@ -61,17 +64,41 @@
 
   function toggleUserMenu() {
     isUserMenuOpen = !isUserMenuOpen;
+    if (isGlobalMenuOpen) {
+      isGlobalMenuOpen = false;
+    }
+  }
+
+  function toggleGlobalMenu() {
+    isGlobalMenuOpen = !isGlobalMenuOpen;
+    if (isUserMenuOpen) {
+      isUserMenuOpen = false;
+    }
+  }
+
+  function closeMenus() {
+    isGlobalMenuOpen = false;
+    isUserMenuOpen = false;
   }
 </script>
 
-<header class="header">
+<header
+  class="header"
+  style={isCategoriesURLHome($page.url.pathname)
+    ? ""
+    : "border-bottom: 1px solid #ebecf0;"}
+>
   <div class="sub-header-div">
     <div class="logo">
       <a href={translatePath("/", $languageStore.lang)} aria-label="Werr">
         <picture>
           <source
             media="(min-width: 769px)"
-            srcset={inScroll ? logoDesktopDark : logoDesktopWhite}
+            srcset={isCategoriesURLHome($page.url.pathname)
+              ? inScroll
+                ? logoDesktopDark
+                : logoDesktopWhite
+              : logoDesktopDark}
             type="image/svg+xml"
           />
           <img
@@ -82,6 +109,7 @@
         </picture>
       </a>
     </div>
+
     <div class="enter-mobile-search">
       <button
         type="button"
@@ -92,23 +120,48 @@
         <Icon icon="basil:search-outline" color="black" />
       </button>
     </div>
+
+    <div class="spacer" />
+    <div class="explore">
+      <button class="explore-btn" on:click={toggleGlobalMenu}>
+        <span class="explore-label" style={inScroll ? "color: black;" : ""}>
+          {multiLang.headerExplore()}
+        </span>
+        <Icon
+          style="margin-left: 4px;"
+          icon={isGlobalMenuOpen
+            ? "basil:caret-up-solid"
+            : "basil:caret-down-solid"}
+          color={isGlobalMenuOpen ? "#00ab6b" : inScroll ? "black" : "white"}
+          width="28"
+          height="28"
+        />
+      </button>
+    </div>
+    {#if isGlobalMenuOpen}
+      <div class="global-menu-large">
+        <GlobalMenuLarge onLangChange={toggleGlobalMenu} />
+      </div>
+    {/if}
+
     {#if !$authStore.currentUser}
       <div class="login-links">
         <button
           class="login"
           on:click={() => {
+            closeMenus();
             openAuthPopup(false);
           }}>{multiLang.login()}</button
         >
         <button
           class="register"
           on:click={() => {
+            closeMenus();
             openAuthPopup(true);
-          }}>Join</button
+          }}>{multiLang.headerRegister()}</button
         >
       </div>
     {:else}
-      <div class="spacer" />
       <div class="userMenu">
         <UserMenuButton
           src={$authStore?.currentUser?.photoURL ?? undefined}
@@ -131,7 +184,7 @@
       {/if}
     {/if}
     <div class="mobileMenu">
-      <button type="button">
+      <button type="button" on:click={toggleGlobalMenu}>
         <Icon
           icon="basil:menu-solid"
           color={inScroll ? "black" : "white"}
@@ -139,7 +192,27 @@
           height="28"
         />
       </button>
+      {#if isGlobalMenuOpen}
+        <div class="global-menu-mobile">
+          <GlobalMenuMobile closeFunction={toggleGlobalMenu} />
+        </div>
+      {/if}
     </div>
+    <a
+      class="uploadButton"
+      on:click={(e) => {
+        // in the user is not connected yet, we open the auth popup instead of redirecting
+        if (!$authStore.currentUser) {
+          console.log("USER not connected yet. Please login");
+          toggleAuthPopup();
+          e.preventDefault();
+        }
+      }}
+      href={translatePath(routes.ACCOUNT.MEDIA.UPLOAD, $languageStore.lang)}
+    >
+      <Icon icon="basil:cloud-upload-solid" width="20" height="20" />
+      <span class="label">Upload</span>
+    </a>
   </div>
 </header>
 
@@ -277,9 +350,6 @@
 
   .logo {
     flex: 0 0 auto;
-  }
-
-  .logo {
     width: 40px;
     height: 40px;
   }
@@ -294,12 +364,71 @@
     flex: 1 1 auto;
   }
 
+  .explore {
+    display: none;
+  }
+
+  .global-menu-large {
+    display: none;
+  }
+
+  .global-menu-mobile {
+    display: flex;
+  }
+
+  .uploadButton {
+    display: none;
+  }
+
   // large screen specific
   @media screen and (min-width: 769px) {
     .logo {
+      flex: 0 0 auto;
       width: 120px;
       height: 33px;
     }
+
+    .uploadButton {
+      margin-left: 12px;
+      background: #00ab6b;
+      color: #fff;
+      border: none;
+      border-radius: 24px;
+      height: 40px;
+      padding: 0 16px;
+      box-sizing: border-box;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.1s ease-in;
+      text-decoration: none;
+      white-space: nowrap;
+      font-weight: 600;
+
+      .label {
+        font-weight: 600;
+        color: inherit;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        margin-left: 3px;
+      }
+    }
+
+    .global-menu-large {
+      display: flex;
+    }
+
+    .global-menu-mobile {
+      display: none;
+    }
+
+    .mobileMenu {
+      display: none;
+    }
+
     .enter-mobile-search {
       display: none;
     }
@@ -308,11 +437,51 @@
     }
 
     .header {
-      padding: 0 32px;
-
+      padding: 0 16px;
       .sub-header-div {
         justify-content: space-between;
-        padding: 0 32;
+        padding: 0 0;
+      }
+    }
+
+    .explore {
+      display: flex;
+
+      .explore-btn {
+        padding: 0 16;
+        min-width: 0;
+        border-radius: 24px;
+        height: 40px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.1s ease-in;
+        margin: 5px;
+        padding: 10px;
+        cursor: pointer;
+        transition: all 0.1s ease-in;
+        text-decoration: none;
+        white-space: nowrap;
+        font-weight: 600;
+        font-size: 14px;
+        color: white;
+        background-color: transparent;
+        border: none;
+        box-sizing: border-box;
+        overflow: visible;
+        text-transform: none;
+        margin: 0;
+        &:hover {
+          background-color: $hoverHeaderColor;
+        }
+
+        .explore-label {
+          font-weight: 600;
+          color: inherit;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
       }
     }
   }
