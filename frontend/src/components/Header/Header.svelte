@@ -35,7 +35,7 @@
     const registerBtn = document.querySelector(".register") as HTMLElement;
     const loginBtn = document.querySelector(".login") as HTMLElement;
 
-    if (scrollTop > 0 || !isCategoriesURLHome(window.location.pathname)) {
+    if (scrollTop > 0 && !isCategoriesURLHome(window.location.pathname)) {
       inScroll = true;
       header.style.backgroundColor = "white";
       header.style.color = "black";
