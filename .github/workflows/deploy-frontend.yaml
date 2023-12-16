@@ -1,0 +1,25 @@
+name: Build frontend image
+
+on:
+  registry_package:
+    types:
+      - updated
+      - published
+
+jobs:
+  deploy-frontend:
+    if: ${{ github.event.registry_package.package_version.name == 'werr-frontend'}}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Execute Remote command
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.SSHHOST }}
+          username: ${{ secrets.SSHUSERNAME }}
+          key: ${{ secrets.SSHKEY }}
+          port: ${{ secrets.SSHPORT }}
+          script: |
+            cd ${{ secrets.PROJECTLOCATION }}
+            make docker-down
+            make docker-up
