@@ -28,6 +28,10 @@
   });
 
   function handleScrool() {
+    if (!isCategoriesURLHome(window.location.pathname)) {
+      return;
+    }
+    console.log("inscroll reached");
     const header = document.querySelector(".header") as HTMLElement;
     const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
 
@@ -35,7 +39,8 @@
     const registerBtn = document.querySelector(".register") as HTMLElement;
     const loginBtn = document.querySelector(".login") as HTMLElement;
 
-    if (scrollTop > 0 && !isCategoriesURLHome(window.location.pathname)) {
+    if (scrollTop > 0) {
+      console.log("inscroll executed");
       inScroll = true;
       header.style.backgroundColor = "white";
       header.style.color = "black";
@@ -44,7 +49,7 @@
       registerBtn.style.color = "black";
       if (inMobile) {
         const enterMobileSearch = document.querySelector(
-          ".enter-mobile-search"
+          ".enter-mobile-search",
         ) as HTMLElement;
         enterMobileSearch.style.display = "flex";
       }
@@ -54,7 +59,7 @@
       header.style.color = "white";
       header.style.borderBottom = "";
       const enterMobileSearch = document.querySelector(
-        ".enter-mobile-search"
+        ".enter-mobile-search",
       ) as HTMLElement;
       enterMobileSearch.style.display = "none";
       loginBtn.style.color = "white";
@@ -83,10 +88,7 @@
 </script>
 
 <header
-  class="header"
-  style={isCategoriesURLHome($page.url.pathname)
-    ? ""
-    : "border-bottom: 1px solid #ebecf0;"}
+  class="header {isCategoriesURLHome($page.url.pathname) ? '' : 'headerOthers'}"
 >
   <div class="sub-header-div">
     <div class="logo">
@@ -222,6 +224,13 @@
   // .root {
   //   border: 1px solid red;
   // }
+
+  .headerOthers {
+    border-bottom: 1px solid #ebecf0;
+    background-color: white;
+    color: black;
+    border-bottom: 1px solid #ebecf0;
+  }
 
   .mobileMenu {
     display: block;

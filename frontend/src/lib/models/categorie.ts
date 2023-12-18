@@ -75,6 +75,9 @@ export function isCategoriesURLHome(url: string): boolean {
     // check if url is one of the categories url
     // check if the category url is on the form of /[language]/[category]
     return CategoriesList.some((category) => {
+        if (category.url == url) {
+            return true
+        }
         const regex = new RegExp(`^/([a-z]{2})?${category.url}$`, 'i');
         return regex.test(url) || category.url === url;
     }) || (url === '/' || new RegExp(`^/([a-z]{2})`, 'i').test(url));
