@@ -5,10 +5,10 @@ on:
     branches:
       - main
     paths:
-      - .github/workflows/build-api-image.yaml
+      - './**'
+      - '.github/workflows/build-api-image.yaml'
       - '!.github/workflows/**'
-    paths-ignore:
-      - frontend/**
+      - '!frontend/**'
 
 env:
   REGISTRY: ghcr.io
