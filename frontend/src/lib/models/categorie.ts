@@ -72,13 +72,18 @@ export const CategoriesList = [
 
 export function isCategoriesURLHome(url: string): boolean {
     console.log("THE URL: ", url);
+    if (url == '/') {
+        return true;
+    }
     // check if url is one of the categories url
     // check if the category url is on the form of /[language]/[category]
+    const regexHome = new RegExp(`^\/([a-z]{2})$`, 'g');
     return CategoriesList.some((category) => {
         if (category.url == url) {
             return true
         }
-        const regex = new RegExp(`^/([a-z]{2})?${category.url}$`, 'i');
-        return regex.test(url) || category.url === url;
-    }) || (url === '/' || new RegExp(`^/([a-z]{2})`, 'i').test(url));
+        //const regex = new RegExp(`^(\/([a-z]{2})?)?\/${category.value}`, 'i');
+        const regex = new RegExp(`^((\/([a-z]{2})?)?\/${category.value}$)|(\/([a-z]{2})?$)`, 'gi');
+        return regex.test(url);
+    });
 }

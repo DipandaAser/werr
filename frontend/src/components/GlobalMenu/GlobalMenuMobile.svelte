@@ -106,7 +106,7 @@
         color: #656f79;
         -o-object-fit: cover;
         object-fit: cover;
-        background: #fff;
+        background: transparent;
       }
     }
   }

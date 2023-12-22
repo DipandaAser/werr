@@ -58,7 +58,7 @@
     <a
       class="dropdownMenuItem"
       on:click={() => {
-        onLangChange();
+        //onLangChange();
       }}
       href={translatePath($page.url.pathname, lang)}
       hreflang={lang}

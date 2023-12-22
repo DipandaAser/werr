@@ -14,6 +14,7 @@
   import GlobalMenuMobile from "../GlobalMenu/GlobalMenuMobile.svelte";
   import GlobalMenuLarge from "../GlobalMenu/GlobalMenuLarge.svelte";
   import { page } from "$app/stores";
+  import { afterNavigate } from "$app/navigation";
   const logoMobileDark = "/logo/mobile-black.svg";
   const logoMobileWhite = "/logo/mobile-white.svg";
   const logoDesktopDark = "/logo/desktop-black.svg";
@@ -21,49 +22,84 @@
   let inScroll = false;
   let isUserMenuOpen = false;
   let isGlobalMenuOpen = false;
+  let isHeaderOnTransparentMode =
+    !inScroll && isCategoriesURLHome($page.url.pathname);
 
   onMount(() => {
-    handleScrool();
-    window.addEventListener("scroll", handleScrool);
+    handleScrool(false);
+    window.addEventListener("scroll", () => {
+      handleScrool(false);
+    });
+    if (!isCategoriesURLHome(window.location.pathname)) {
+      isHeaderOnTransparentMode = false;
+      applyTransparentModeChanges();
+    }
   });
 
-  function handleScrool() {
+  afterNavigate(() => {
     if (!isCategoriesURLHome(window.location.pathname)) {
-      return;
+      isHeaderOnTransparentMode = false;
+      applyTransparentModeChanges();
+    } else {
+      handleScrool(true);
     }
-    console.log("inscroll reached");
-    const header = document.querySelector(".header") as HTMLElement;
     const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    inScroll = scrollTop > 0;
+  });
 
+  function applyTransparentModeChanges() {
+    const header = document.querySelector(".header") as HTMLElement;
     const inMobile = window.innerWidth < 769;
     const registerBtn = document.querySelector(".register") as HTMLElement;
     const loginBtn = document.querySelector(".login") as HTMLElement;
-
-    if (scrollTop > 0) {
-      console.log("inscroll executed");
-      inScroll = true;
-      header.style.backgroundColor = "white";
-      header.style.color = "black";
-      header.style.borderBottom = "1px solid #ebecf0";
+    header.style.backgroundColor = "white";
+    header.style.color = "black";
+    header.style.borderBottom = "1px solid #ebecf0";
+    if (!authStore.currentUser) {
       loginBtn.style.color = "#656f79";
       registerBtn.style.color = "black";
-      if (inMobile) {
-        const enterMobileSearch = document.querySelector(
-          ".enter-mobile-search",
-        ) as HTMLElement;
-        enterMobileSearch.style.display = "flex";
-      }
-    } else {
-      inScroll = false;
-      header.style.backgroundColor = "transparent";
-      header.style.color = "white";
-      header.style.borderBottom = "";
+    }
+    if (inMobile) {
       const enterMobileSearch = document.querySelector(
-        ".enter-mobile-search",
+        ".enter-mobile-search"
       ) as HTMLElement;
-      enterMobileSearch.style.display = "none";
+      enterMobileSearch.style.display = "flex";
+    }
+  }
+
+  function disableTransparentModeChanges() {
+    const header = document.querySelector(".header") as HTMLElement;
+    const inMobile = window.innerWidth < 769;
+    const registerBtn = document.querySelector(".register") as HTMLElement;
+    const loginBtn = document.querySelector(".login") as HTMLElement;
+    header.style.backgroundColor = "transparent";
+    header.style.color = "white";
+    header.style.borderBottom = "";
+    const enterMobileSearch = document.querySelector(
+      ".enter-mobile-search"
+    ) as HTMLElement;
+    if (authStore.currentUser) {
       loginBtn.style.color = "white";
       registerBtn.style.color = "white";
+    }
+    enterMobileSearch.style.display = "none";
+  }
+
+  function handleScrool(refresh: boolean) {
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    inScroll = scrollTop > 0;
+    console.log("url: ", window.location.pathname);
+    if (!isCategoriesURLHome(window.location.pathname)) {
+      isHeaderOnTransparentMode = false;
+      console.log("not in home");
+      return;
+    }
+    console.log("inscroll reached");
+
+    if (inScroll || !isCategoriesURLHome(window.location.pathname)) {
+      applyTransparentModeChanges();
+    } else {
+      disableTransparentModeChanges();
     }
   }
 
@@ -85,27 +121,28 @@
     isGlobalMenuOpen = false;
     isUserMenuOpen = false;
   }
+
+  $: console.log("isHeaderOnTransparentMode: ", isHeaderOnTransparentMode);
+
+  $: isHeaderOnTransparentMode =
+    !inScroll && isCategoriesURLHome($page.url.pathname);
 </script>
 
-<header
-  class="header {isCategoriesURLHome($page.url.pathname) ? '' : 'headerOthers'}"
->
+<header class="header {isHeaderOnTransparentMode ? '' : 'in-scrool'}">
   <div class="sub-header-div">
     <div class="logo">
       <a href={translatePath("/", $languageStore.lang)} aria-label="Werr">
         <picture>
           <source
             media="(min-width: 769px)"
-            srcset={isCategoriesURLHome($page.url.pathname)
-              ? inScroll
-                ? logoDesktopDark
-                : logoDesktopWhite
+            srcset={isHeaderOnTransparentMode
+              ? logoDesktopWhite
               : logoDesktopDark}
             type="image/svg+xml"
           />
           <img
             class="logo"
-            src={inScroll ? logoMobileDark : logoMobileWhite}
+            src={isHeaderOnTransparentMode ? logoMobileWhite : logoMobileDark}
             alt="Werr"
           />
         </picture>
@@ -126,7 +163,9 @@
     <div class="spacer" />
     <div class="explore">
       <button class="explore-btn" on:click={toggleGlobalMenu}>
-        <span class="explore-label" style={inScroll ? "color: black;" : ""}>
+        <span
+          class="explore-label {isHeaderOnTransparentMode ? '' : 'in-scroll'}"
+        >
           {multiLang.headerExplore()}
         </span>
         <Icon
@@ -134,7 +173,11 @@
           icon={isGlobalMenuOpen
             ? "basil:caret-up-solid"
             : "basil:caret-down-solid"}
-          color={isGlobalMenuOpen ? "#00ab6b" : inScroll ? "black" : "white"}
+          color={isGlobalMenuOpen
+            ? "#00ab6b"
+            : isHeaderOnTransparentMode
+              ? "white"
+              : "black"}
           width="28"
           height="28"
         />
@@ -490,6 +533,10 @@
           display: flex;
           align-items: center;
           justify-content: center;
+
+          &.in-scroll {
+            color: black;
+          }
         }
       }
     }
