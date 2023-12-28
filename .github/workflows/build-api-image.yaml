@@ -4,11 +4,11 @@ on:
   push:
     branches:
       - main
-    paths:
-      - './**'
-      - '.github/workflows/build-api-image.yaml'
-      - '!.github/workflows/**'
-      - '!frontend/**'
+    paths-ignore:
+      - '.github/workflows/build-frontend-image.yaml'
+      - '.github/workflows/deploy-frontend.yaml'
+      - 'frontend/**'
+      - 'desing/**'
 
 env:
   REGISTRY: ghcr.io
