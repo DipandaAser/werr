@@ -6,7 +6,7 @@ type MediaType string
 type MediaStatus string
 
 const (
-	MediaTypePhoto MediaType = "photo"
+	MediaTypeImage MediaType = "image"
 	MediaTypeAudio MediaType = "audio"
 	MediaTypeGif   MediaType = "gif"
 	MediaTypeVideo MediaType = "video"
