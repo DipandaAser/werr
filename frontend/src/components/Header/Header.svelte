@@ -56,8 +56,12 @@
     header.style.color = "black";
     header.style.borderBottom = "1px solid #ebecf0";
     if (!authStore.currentUser) {
-      loginBtn.style.color = "#656f79";
-      registerBtn.style.color = "black";
+      if (loginBtn) {
+        loginBtn.style.color = "#656f79";
+      }
+      if (registerBtn) {
+        registerBtn.style.color = "black";
+      }
     }
     if (inMobile) {
       const enterMobileSearch = document.querySelector(
@@ -78,9 +82,14 @@
     const enterMobileSearch = document.querySelector(
       ".enter-mobile-search"
     ) as HTMLElement;
-    if (authStore.currentUser) {
-      loginBtn.style.color = "white";
-      registerBtn.style.color = "white";
+    if (!authStore.currentUser) {
+      if (loginBtn) {
+        loginBtn.style.color = "white";
+      }
+
+      if (registerBtn) {
+        registerBtn.style.color = "white";
+      }
     }
     enterMobileSearch.style.display = "none";
   }
@@ -232,7 +241,7 @@
       <button type="button" on:click={toggleGlobalMenu}>
         <Icon
           icon="basil:menu-solid"
-          color={inScroll ? "black" : "white"}
+          color={isHeaderOnTransparentMode ? "white" : "black"}
           width="28"
           height="28"
         />

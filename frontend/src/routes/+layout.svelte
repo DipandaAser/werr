@@ -1,6 +1,6 @@
 <script lang="ts">
   import "../app.scss";
-  import "carbon-components-svelte/css/white.css";
+  import "../app.css";
   import { onMount } from "svelte";
   import { auth } from "$lib/firebase/firebase.client";
   import { authStore } from "../stores/authStore";

@@ -11,5 +11,18 @@
 	"userMenucollections": "Collections",
 	"userMenufollowing": "Following",
 	"userMenusettings": "Settings",
-	"userMenulogout": "Logout"
+	"userMenulogout": "Logout",
+	"uploadPage_UploadRemain": "uploads remaining this week",
+	"uploadPage_UploadRemainDetails": "Werr limits weekly uploads, so that all submissions can be properly reviewed by our team. The limit is determined by the quality of your medias. The higher the quality, the more you're able to upload.",
+	"browseFiles": "Browse files",
+	"tags": "Tags",
+	"title": "Title",
+	"description": "Description",
+	"editMedia_TitlePlaceHolder": "Enter a title",
+	"editMedia_DescriptionPlaceHolder": "Enter a description",
+	"editMedia_TagsPlaceHolder": "Enter 3 or more tags (comma separated)",
+	"submit": "Submit",
+	"cancel": "Cancel",
+	"uploadCompleteMessage": "Upload completed successfully",
+	"uploadFailedMessage": "An error occurred. Please Retry"
 }

@@ -22,7 +22,10 @@
   <hr class="divider" />
   <div class="contentContainer">
     <div class="uploaContainer">
-      <a href={translatePath(routes.ACCOUNT.MEDIA.UPLOAD, $languageStore.lang)}>
+      <a
+        on:click={closeFunction}
+        href={translatePath(routes.ACCOUNT.MEDIA.UPLOAD, $languageStore.lang)}
+      >
         <Icon icon="basil:cloud-upload-solid" width="20" height="20" />
         <span class="label">Upload</span>
       </a>

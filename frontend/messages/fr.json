@@ -11,5 +11,18 @@
 	"userMenucollections": "Collections",
 	"userMenufollowing": "Abonnements",
 	"userMenusettings": "Paramètres",
-	"userMenulogout": "Déconnexion"
+	"userMenulogout": "Déconnexion",
+	"uploadPage_UploadRemain": "uploads restants cette semaine",
+	"uploadPage_UploadRemainDetails": "Werr limite le nombres d'uploads hebdomadaires, afin que touts les medias puissent être correctement examinées par notre équipe. La limite est déterminée par la qualité de votre travail. Plus la qualité est élevée, plus vous pouvez uploader des medias.",
+	"browseFiles": "Parcourir les fichiers",
+	"tags": "Tags",
+	"title": "Titre",
+	"description": "Description",
+	"editMedia_TitlePlaceHolder": "Entrer un titre",
+	"editMedia_DescriptionPlaceHolder": "Entrer une description (optionnel)",
+	"editMedia_TagsPlaceHolder": "Entrer au moins 3 tags/mots (separés par des virgules)",
+	"submit": "Soumettre",
+	"cancel": "Annuler",
+	"uploadCompleteMessage": "Upload terminé avec succès",
+	"uploadFailedMessage": "Une errur est survenue. Veulliez réessayer plus tard."
 }

@@ -1,1 +1,39 @@
 /* Write your global styles here, in SCSS syntax. Variables and mixins from the src/variables.scss file are available here without importing */
+
+.buttonBase{
+    border-radius: 24px;
+    height: 40px;
+    padding: 0 16px;
+    box-sizing: border-box;
+}
+
+.base {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all .1s ease-in;
+    text-decoration: none;
+    white-space: nowrap;
+    font-weight: 600;
+}
+
+.primaryButton{
+    background: #00ab6b;
+    color: #fff;
+    border: none;
+}
+
+.tertiaryButton{
+    background: transparent;
+  color: #fff;
+  border: none;
+}
+
+.label{
+    font-weight: 600;
+    color: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
