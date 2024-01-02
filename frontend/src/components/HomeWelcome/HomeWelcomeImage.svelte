@@ -40,8 +40,8 @@
   }
 </script>
 
-<div class="base">
-  <div class="image">
+<div class="base1">
+  <div class="image1">
     <picture>
       <source
         srcset="https://cdn.pixabay.com/index/2023/11/24/01-58-59-34_1920x550.jpg"
@@ -61,7 +61,7 @@
   <!-- This is just the blur filter-->
   <div class="overlay"></div>
   <div class="welcomeMessageBox">
-    <div class="wrapper">
+    <div class="wrapper1">
       <h1>{welcomeTitle}</h1>
       <h2>{description}</h2>
       <div class="search-box">
@@ -144,7 +144,7 @@
 <style lang="scss">
   $hoverHeaderColor: rgba(182, 175, 175, 0.151);
   $chooseCatTextColor: #656f79;
-  .base {
+  .base1 {
     min-height: 464px;
     position: relative;
     width: 100%;
@@ -157,7 +157,7 @@
     //border-bottom: 1px solid salmon;
   }
 
-  .image {
+  .image1 {
     position: absolute;
     left: 0;
     top: 0;
@@ -199,7 +199,7 @@
     flex-direction: column;
     text-align: left;
 
-    .wrapper {
+    .wrapper1 {
       width: 100%;
       max-width: 840px;
       display: flex;
@@ -216,7 +216,6 @@
         font-weight: 400;
         font-size: 14px;
         margin: 0 0 24px;
-        color: #fff;
       }
 
       .search-box {

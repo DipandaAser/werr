@@ -22,7 +22,7 @@
   onSelectTab(selectedTab);
 </script>
 
-<div class="container">
+<div class="container1">
   <div class="tabs">
     {#each chips as chip}
       <Chips
@@ -45,7 +45,7 @@
 </div>
 
 <style lang="scss">
-  .container {
+  .container1 {
     padding: 24px 16px;
     margin-left: -16px;
     // margin-right: -16px;
@@ -54,6 +54,7 @@
     align-items: center;
     justify-content: center;
   }
+
   .tabs {
     margin-left: -8px;
     padding-left: 16px;
